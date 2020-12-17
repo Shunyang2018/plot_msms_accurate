@@ -31,7 +31,7 @@
 !
 !     Adapted version:
 !     Shunyang Wang - FiehnLab 2020
-!
+!     Shunyang Wang - Dec 2020
 !
 !====================================================================
 
@@ -62,7 +62,7 @@
       integer nat  (10000)
       integer idum (10000)
       integer mass (1000)
-      integer isec,jsec,ial,jal(0:10),nf,irun
+      integer isec,jsec,ial,jal(0:10),nf,irun,intint
       real*8  mint (1000)
 ! TK  tmass contains abundances (real) for each unit mass (i)
       real*8  tmass(10000)
@@ -582,11 +582,16 @@
     !15,20 26,10 27,20 29,50
 
     write(*,*)'write result.jdx....'
+    s = 0
     do i=10,10000
          if(tmass(i).ne.0)then
            ! unit mass to exact mass
            ! write(11,"(I4, I8)") i, int(100.*tmass(i)/tmax)
-           write(11,"(I4, I8)") i, int(1000.*tmass(i)/tmax)
+           intint = int(1000.*tmass(i)/tmax)
+           if (intint >=1) then
+             s = s + 1
+           write(11,"(I4, I8)") i, intint
+         endif
          endif
     enddo
     write(*,*)'write accurate mass...'
@@ -615,8 +620,8 @@
       formula = mdict%get(tkey_list(i))
       intensity = 1000.*ftmp/kmax
       if (intensity >=1) then
-      write(111,9) tkey_list(i),1000.*ftmp/kmax,trim(formula)
-    end if 
+      write(111,9) trim(tkey_list(i)),1000.*ftmp/kmax,trim(formula)
+    end if
       formula2 = trim(formula)
       n =  index( formula2, achar(0) )
 
@@ -631,7 +636,7 @@
       write(1111,8) formula,tkey_list(i), int(1000.*ftmp/kmax)
     end do
 9   format(a,2x, F7.2, 2x, a)
-8   format(a20,2x,a,2x, I8)
+8   format(a,2x,a,2x, I8)
     write(11,"(A)")'##END='
     write(111,"(A)")'##END='
     write(1111,"(A)")'##END='
