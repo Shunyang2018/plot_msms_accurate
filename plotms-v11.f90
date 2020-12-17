@@ -50,7 +50,7 @@
 !    declare parameters in dictionary
       type(dictionary_t) :: dict, tdict, mdict
       character(len=16), allocatable :: key_list(:), tkey_list(:),mkey_list(:)
-      integer dictsize,s
+      integer dictsize,s,si
       character*16 charstrk, charstrv, ctmp
       real*16 ttmp, tmp, floatv, kmax, ftmp
 
@@ -522,65 +522,27 @@
 ! TK currently unit mass only
     ! SW also generate accurate mass
     ! TK open file as JCAMP-DX MS result file, open new or replace
-    write(*,*)'open file 11'
+    write(*,*)'open file result.jdx'
     open(unit=11, file='result.jdx', STATUS="REPLACE")
-    write(*,*)'open file 111'
-    open(unit=111, file='accuratemass.jdx',STATUS="REPLACE")
-    write(*,*)'open file 1111'
-    open(unit=1111, file='formula.txt',STATUS="REPLACE", encoding='UTF-8')
-    ! TK minimum JCAMP-DX header
     write(11,"(A)")'##TITLE=Theoretical in-silico spectrum (QCEIMS)'
     write(11,"(A)")'##JCAMP-DX=4.24'
     write(11,"(A)")'##DATA TYPE=MASS SPECTRUM'
-! SW
-    write(111,"(A)")'##TITLE=Theoretical in-silico spectrum (QCEIMS)'
-    write(111,"(A)")'##JCAMP-DX=4.24'
-    write(111,"(A)")'##DATA TYPE=MASS SPECTRUM'
-    !write(11,*)'##MOLFORM=C13 H22 O3 Si2'
-    !write(11,*)'##MW=282'
-
     write(11,"(A)")'##XUNITS=M/Z'
     write(11,"(A)")'##YUNITS=RELATIVE INTENSITY'
-!SW
-    write(111,"(A)")'##XUNITS=M/Z'
-    write(111,"(A)")'##YUNITS=RELATIVE INTENSITY'
-    !write(11,*)'##XFACTOR=1'
-    !write(11,*)'##YFACTOR=1'
-    !write(11,*)'##FIRSTX=15'
-    !write(11,*)'##LASTX=281'
-    !write(11,*)'##FIRSTY=20'
-    !write(11,*)'##MAXX=281'
-    !write(11,*)'##MINX=15'
-    !write(11,*)'##MAXY=9999'
-    !write(11,*)'##MINY=10'
-
-    ! TK calculate number of in-silico spectra
-    ! TK new: numspec = idint(tmax) ** not related to number ofr spectral peaks
+! TK calculate number of in-silico spectra
+! TK new: numspec = idint(tmax) ** not related to number ofr spectral peaks
      numspec = 0
      do i=10,10000
          if(tmass(i).ne.0)then
+           intint = int(1000.*tmass(i)/tmax)
+           if (intint >=1) then
             numspec = numspec + 1
          endif
+       endif
      enddo
 
-
     write(11,'(A, I0)')'##NPOINTS=' ,numspec
-    call tdict%show(tkey_list)
-    write(*,*)'***********'
-    call mdict%show(mkey_list)
-    s = SIZE(tkey_list)
-    array_len = s
-    write(111,'(A, I0)')'##NPOINTS=' ,s
-    write(1111,'(A, I0)')'##NPOINTS=' ,s
-
-    ! TK ##XYDATA=(XY..XY) 1 designates one line per m/z abd pair
-    ! TK separated by comma
-    ! TK 1.500000e+001 ,5.000000e+000
-
     write(11,"(A)")'##PEAK TABLE=(XY..XY) 1'
-    write(111,"(A)")'##PEAK TABLE=(XY..XY) 1'
-    !15,20 26,10 27,20 29,50
-
     write(*,*)'write result.jdx....'
     s = 0
     do i=10,10000
@@ -594,6 +556,23 @@
          endif
          endif
     enddo
+    write(11,"(A)")'##END='
+    close(11)
+
+    write(*,*)'open file accuratemass.jdx'
+    open(unit=111, file='accuratemass.jdx',STATUS="REPLACE")
+    write(111,"(A)")'##TITLE=Theoretical in-silico spectrum (QCEIMS)'
+    write(111,"(A)")'##JCAMP-DX=4.24'
+    write(111,"(A)")'##DATA TYPE=MASS SPECTRUM'
+    write(111,"(A)")'##XUNITS=M/Z'
+    write(111,"(A)")'##YUNITS=RELATIVE INTENSITY'
+    call tdict%show(tkey_list)
+    write(*,*)'***********'
+    call mdict%show(mkey_list)
+    s = SIZE(tkey_list)
+    array_len = s
+
+
     write(*,*)'write accurate mass...'
 !    write(*,*)'before sorting',tkey_list
     write(*,*)'sort key list'
@@ -610,40 +589,69 @@
       if (ftmp > kmax) THEN
         kmax = ftmp
       end if
-
-    end do
-    !write(*,*)'maximum m/z', kmax
-    write(1111,'(a20,2x,a,2x,a)')'formula','m/z','intensity'
+    enddo
+    si = 0
     do i = 1, s
       ctmp = tdict%get(tkey_list(i))
       read (ctmp,*) ftmp
       formula = mdict%get(tkey_list(i))
       intensity = 1000.*ftmp/kmax
       if (intensity >=1) then
-      write(111,9) trim(tkey_list(i)),1000.*ftmp/kmax,trim(formula)
-    end if
-      formula2 = trim(formula)
-      n =  index( formula2, achar(0) )
 
-      if ( n > 0 ) then
-
-       formula = formula2(1:n-1)
-!       write(*,*)'n',n,formula
-   else
-       formula = formula2
-   endif
-      n = len(formula)
-      write(1111,8) formula,tkey_list(i), int(1000.*ftmp/kmax)
+        si = si + 1
+      end if
     end do
-9   format(a,2x, F7.2, 2x, a)
-8   format(a,2x,a,2x, I8)
-    write(11,"(A)")'##END='
+    write(111,'(A, I0)')'##NPOINTS=' ,si
+    write(111,"(A)")'##PEAK TABLE=(XY..XY) 1'
+
+
+
+    do i = 1, s
+      ctmp = tdict%get(tkey_list(i))
+      read (ctmp,*) ftmp
+      formula = mdict%get(tkey_list(i))
+      intensity = 1000.*ftmp/kmax
+      if (intensity >=1) then
+        formula2 = trim(formula)
+        n =  len_trim( formula2)
+        formula = formula2(1:n)
+
+write(111,9) ADJUSTL(trim(tkey_list(i))),1000.*ftmp/kmax,'"',trim(formula),'"'
+    end if
+
+    end do
+
     write(111,"(A)")'##END='
-    write(1111,"(A)")'##END='
-    ! TK close the JCAMP-DX file
-    close(11)
+
     close(111)
+
+    write(*,*)'writing file formula.txt'
+    open(unit=1111, file='formula.txt',STATUS="REPLACE", encoding='UTF-8')
+
+    write(1111,'(A, I0)')'##NPOINTS=' ,s
+    !write(*,*)'maximum m/z', kmax
+    write(1111,'(a,2x,a,2x,a)')'formula','m/z','intensity'
+    do i = 1, s
+      ctmp = tdict%get(tkey_list(i))
+      read (ctmp,*) ftmp
+      formula = ADJUSTR(trim(mdict%get(tkey_list(i))))
+      formula2 = trim(formula)
+      n =  len_trim( formula2)
+      formula = formula2(1:n)
+
+      write(1111,99) formula,tkey_list(i), 1000.*ftmp/kmax
+
+    end do
+    write(1111,"(A)")'##END='
     close(1111)
+
+
+9   format(a,2x, F7.2, 2x, a1,a,a1)
+8   format(a20,2x,a,2x, I8)
+99   format(a20,2x, a, 2x, F6.2)
+
+
+
 ! compute deviation exp-theor.
 ! TK here we potentially have to use Mass Spec related terms, such as dot product
 ! From Stein and Scott
