@@ -78,8 +78,8 @@
 ! TK  fname=<qceims.res> or result file, xname contains the mass.agr plot file
       character*80 arg(10),line,fname,xname,formula,aaa,formula_former
       character*80 formula2
-      character*2 a2,adum
-      character*5 aa
+      character*2 a2
+      character*5 aa,adum
       character*2 symbol(200)
       character*255 atmp
 
@@ -617,7 +617,7 @@ formula_former='' !formula from the last loop run
         n =  len_trim( formula2)
         formula = formula2(1:n)
 
-if (formula==formula_former)adum='*'
+if (formula==formula_former)adum='(iso)'
 formula2  = '"'//trim(formula)//trim(adum)//'"'
 write(111,9) ADJUSTL(trim(tkey_list(i))),1000.*ftmp/kmax,formula2
     formula_former = formula
@@ -644,7 +644,7 @@ write(111,9) ADJUSTL(trim(tkey_list(i))),1000.*ftmp/kmax,formula2
       formula2 = trim(formula)
       n =  len_trim( formula2)
       formula = formula2(1:n)
-      if (formula==formula_former)adum='*'
+      if (formula==formula_former)adum='(iso)'
       write(1111,99) trim(formula)//adum,tkey_list(i), 1000.*ftmp/kmax
       formula_former = formula
     end do
