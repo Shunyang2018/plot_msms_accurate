@@ -76,9 +76,9 @@
       logical ex,sel,echo,exdat,mpop
 
 ! TK  fname=<qceims.res> or result file, xname contains the mass.agr plot file
-      character*80 arg(10),line,fname,xname,formula,aaa
+      character*80 arg(10),line,fname,xname,formula,aaa,formula_former
       character*80 formula2
-      character*2 a2
+      character*2 a2,adum
       character*5 aa
       character*2 symbol(200)
       character*255 atmp
@@ -605,8 +605,9 @@
     write(111,"(A)")'##PEAK TABLE=(XY..XY) 1'
 
 
-
+formula_former='' !formula from the last loop run
     do i = 1, s
+      adum='' !isotpic peak sign
       ctmp = tdict%get(tkey_list(i))
       read (ctmp,*) ftmp
       formula = mdict%get(tkey_list(i))
@@ -616,7 +617,9 @@
         n =  len_trim( formula2)
         formula = formula2(1:n)
 formula  = '"'//trim(formula)//'"'
-write(111,9) ADJUSTL(trim(tkey_list(i))),1000.*ftmp/kmax,formula
+if (formula==formula_former)adum='*'
+write(111,9) ADJUSTL(trim(tkey_list(i))),1000.*ftmp/kmax,formula,adum
+    formula_former = formula
     end if
 
     end do
@@ -631,24 +634,26 @@ write(111,9) ADJUSTL(trim(tkey_list(i))),1000.*ftmp/kmax,formula
     write(1111,'(A, I0)')'##NPOINTS=' ,s
     !write(*,*)'maximum m/z', kmax
     write(1111,'(a,2x,a,2x,a)')'formula','m/z','intensity'
+    formula_former=''
     do i = 1, s
+      adum=''
       ctmp = tdict%get(tkey_list(i))
       read (ctmp,*) ftmp
       formula = ADJUSTR(trim(mdict%get(tkey_list(i))))
       formula2 = trim(formula)
       n =  len_trim( formula2)
       formula = formula2(1:n)
-
-      write(1111,99) formula,tkey_list(i), 1000.*ftmp/kmax
-
+      if (formula==formula_former)adum=' *'
+      write(1111,99) formula,adum,tkey_list(i), 1000.*ftmp/kmax
+      formula_former = formula
     end do
     write(1111,"(A)")'##END='
     close(1111)
 
 
-9   format(a,2x, F7.2, 2x, a20)
+9   format(a,2x, F7.2, 2x, a20,2x,a)
 8   format(a20,2x,a,2x, I8)
-99   format(a20,2x, a, 2x, F7.2)
+99   format(a20,2x,a,2x, a, 2x, F7.2)
 
 
 
