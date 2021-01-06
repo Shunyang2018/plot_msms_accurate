@@ -616,9 +616,10 @@ formula_former='' !formula from the last loop run
         formula2 = trim(formula)
         n =  len_trim( formula2)
         formula = formula2(1:n)
-formula  = '"'//trim(formula)//'"'
+
 if (formula==formula_former)adum='*'
-write(111,9) ADJUSTL(trim(tkey_list(i))),1000.*ftmp/kmax,formula,adum
+formula2  = '"'//trim(formula)//trim(adum)//'"'
+write(111,9) ADJUSTL(trim(tkey_list(i))),1000.*ftmp/kmax,formula2
     formula_former = formula
     end if
 
@@ -643,17 +644,17 @@ write(111,9) ADJUSTL(trim(tkey_list(i))),1000.*ftmp/kmax,formula,adum
       formula2 = trim(formula)
       n =  len_trim( formula2)
       formula = formula2(1:n)
-      if (formula==formula_former)adum=' *'
-      write(1111,99) formula,adum,tkey_list(i), 1000.*ftmp/kmax
+      if (formula==formula_former)adum='*'
+      write(1111,99) trim(formula)//adum,tkey_list(i), 1000.*ftmp/kmax
       formula_former = formula
     end do
     write(1111,"(A)")'##END='
     close(1111)
 
 
-9   format(a,2x, F7.2, 2x, a20,2x,a)
+9   format(a,2x, F7.2, 2x, a20)
 8   format(a20,2x,a,2x, I8)
-99   format(a20,2x,a,2x, a, 2x, F7.2)
+99   format(a20,2x, a, 2x, F7.2)
 
 
 
