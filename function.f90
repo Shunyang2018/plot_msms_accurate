@@ -94,6 +94,7 @@
      massiso(16,3)=33.967867
      massiso(16,4)=31.972071
 
+
 ! TK 17Cl - changed to isotopic masses and abundances OK
      niso(17)=2
      prob(17,1)=75.76
@@ -124,9 +125,32 @@
      dictsize=1024
      call dict%init(dictsize)
 
+! SW monoisotopic noble gas
+! TK Helium (assume to be monoisotopic)
+      niso(2)=1
+      prob(2,1)=100.
+      massiso(2,1)=4.0026
+! TK Neon (assume to be monoisotopic)
+      niso(10)=1
+      prob(10,1)=100.
+      massiso(10,1)=20.180
+! TK Argon (assume to be monoisotopic)
+      niso(18)=1
+      prob(18,1)=100.
+      massiso(18,1)=39.948
+! TK Argon (assume to be monoisotopic)
+      niso(36)=1
+      prob(36,1)=100.
+      massiso(36,1)=83.798
+! TK Argon (assume to be monoisotopic)
+      niso(54)=1
+      prob(54,1)=100.
+      massiso(54,1)=131.29
+
 
 
 ! TK mass currently only loops to element 36  (Krypton)
+! check isotope data saved in this program
      do i=1,36
         xm=0
         do j=1,niso(i)

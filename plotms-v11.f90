@@ -233,6 +233,7 @@
       ! k = 2
 
       open(unit=1,file=fname)
+      ! iat atomic number; nat number of atoms
  10   read(1,*,end=100)chrg2,irun,jsec,nf,k,(iat(kk),nat(kk),kk=1,k)
       !            0.9999912  100 2 1    3     1  9   6  3  14  1
       ! TK just for debug purposes
@@ -317,7 +318,7 @@
         endif
           aaa(length+1:length+nn)=aa(1:nn)
           length = length + nn
-! all atoms of this type
+! all atoms of this type, generate atomic number list, 3 C = [6 6 6]
           do kkk=1,nat(kk)
              kkkk=kkkk+1
              idum(kkkk)=iat(kk)
@@ -330,6 +331,7 @@
 
 ! compute pattern, nsig signals at masses mass with int mint
         write(*,*)'calculating traj',irun,'step',jsec,'frag',nf
+! natot total atom number
         call isotope(natot,idum,ndim,nrnd,rnd,mass,mint,nsig,dict, &
         mdict,key_list,formula)
         if(cw.gt.1.d-6)chrg=chrg+cw*chrg*snorm()
