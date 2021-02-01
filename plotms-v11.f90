@@ -110,6 +110,11 @@
       symbol(16)='S'
       symbol(17)='Cl'
       symbol(35)='Br'
+      symbol(2)='He'
+      symbol(10)='Ne'
+      symbol(18)='Ar'
+      symbol(36)='Kr'
+      symbol(54)='Xe'
 ! edit this path name to some standard xmgrace plot file
 ! TK changed to direct working path
 
