@@ -50,7 +50,7 @@
 !    declare parameters in dictionary
       type(dictionary_t) :: dict, tdict, mdict
       character(len=16), allocatable :: key_list(:), tkey_list(:),mkey_list(:)
-      integer dictsize,s,si
+      integer dictsize,s,si,pos
       character*16 charstrk, charstrv, ctmp
       real*16 ttmp, tmp, floatv, kmax, ftmp
 
@@ -623,6 +623,11 @@ formula_former='' !formula from the last loop run
         formula2 = trim(formula)
         n =  len_trim( formula2)
         formula = formula2(1:n)
+! SW try to remove null value in first entry
+        pos = index( formula, achar(0) )
+   if ( pos > 0 ) then
+       formula = formula(1:pos)
+     endif
 
 if (formula==formula_former)adum='(iso)'
 formula2  = '"'//trim(formula)//trim(adum)//'"'
