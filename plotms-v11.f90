@@ -50,7 +50,7 @@
 !    declare parameters in dictionary
       type(dictionary_t) :: dict, tdict, mdict
       character(len=16), allocatable :: key_list(:), tkey_list(:),mkey_list(:)
-      integer dictsize,s,si,pos
+      integer dictsize,s,si,pos,cindex
       character*16 charstrk, charstrv, ctmp
       real*16 ttmp, tmp, floatv, kmax, ftmp
 
@@ -77,7 +77,7 @@
 
 ! TK  fname=<qceims.res> or result file, xname contains the mass.agr plot file
       character*80 arg(10),line,fname,xname,formula,aaa,formula_former
-      character*80 formula2
+      character*80 formula2,bbb
       character*2 a2
       character*5 aa,adum
       character*2 symbol(200)
@@ -263,6 +263,7 @@
 
 ! initialize the random number array (efficiency)
       nrnd=50000
+!      nrnd=500
       allocate(rnd(ndim,nrnd))
       do i=1,nrnd
          do j=1,ndim
@@ -330,7 +331,13 @@
           enddo
         enddo
         checksum=checksum+chrg
+        ! move H to the end of formula
+        cindex = INDEX(aaa,'C')
+        bbb = aaa(1:cindex-1)
+        aaa = aaa(cindex:length)//bbb
+
         formula = trim(aaa)
+
         aaa = ''
 
 
@@ -354,7 +361,7 @@
 
 ! SW accurate mass
         !write(*,*)'key value used in floatv function',charstrk
-         tmp = floatv(charstrk,dict)
+         tmp = floatv(charstrk,dict)*chrg
          !SW get frequency
          if (tdict%get(charstrk) .eq. ' ') THEN
            write(charstrv,'(F16.6)')tmp
@@ -583,6 +590,7 @@
     write(*,*)'write accurate mass...'
 !    write(*,*)'before sorting',tkey_list
     write(*,*)'sort key list'
+
     CALL qsort(tkey_list,array_len,array_size,cmp_function) ! sort mass in float order
     write(*,*)tkey_list
     kmax = 0.
@@ -600,6 +608,7 @@
     si = 0
     do i = 1, s
       ctmp = tdict%get(tkey_list(i))
+
       read (ctmp,*) ftmp
       formula = mdict%get(tkey_list(i))
       intensity = 1000.*ftmp/kmax
@@ -631,7 +640,7 @@ formula_former='' !formula from the last loop run
 
 if (formula==formula_former)adum='(iso)'
 formula2  = '"'//trim(formula)//trim(adum)//'"'
-write(111,9) ADJUSTL(trim(tkey_list(i))),1000.*ftmp/kmax,formula2
+write(111,9) ADJUSTL(trim(tkey_list(i))),intensity,formula2
     formula_former = formula
     end if
 
