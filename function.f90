@@ -23,7 +23,7 @@
      real*8  mint(*)
      real*4  rnd(ndim,nrnd)
      character*80 formula
-     real*4  prob(200,4),massiso(200,4),p1,p2,x,xmass,examass
+     real*8  prob(200,4),massiso(200,4),p1,p2,x,xmass,examass
      integer niso(200)
      integer nmass(10000)
      integer n,i,j,iso,imass,isum,k,iti
@@ -190,13 +190,15 @@
            p2=p2+prob(iti,iso+1)
         enddo
         xmass=xmass+x
-        !write(*,*)'exact mass',xmass
+
      enddo
+     xmass = aint( xmass * 10000.0) / 10000.0
+
      !SW mass and intensity
      imass=int(xmass)
      nmass(imass)=nmass(imass)+1
      !SW exact mass and intensity
-     write(charstrk,'(F16.6)')xmass
+     write(charstrk,'(F16.4)')xmass
      call mdict%set(charstrk, formula)
 
    !  write(*,*) charstrk,'<key vaule>',dict%get(charstrk)
