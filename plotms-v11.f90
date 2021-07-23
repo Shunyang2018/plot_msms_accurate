@@ -115,6 +115,12 @@
       symbol(18)='Ar'
       symbol(36)='Kr'
       symbol(54)='Xe'
+      symbol(26)='Fe'
+      symbol(28)='Ni'
+      symbol(29)='Cu'
+      symbol(30)='Zn'
+      symbol(27)='Co'
+      symbol(74)='W'
 ! edit this path name to some standard xmgrace plot file
 ! TK changed to direct working path
 
@@ -174,8 +180,8 @@
       inquire(file=fname,exist=ex)
       if(.not.ex) stop 'res file does not exist'
 
-      write(*,*) 'QCEIMS output reader PLOTMS'
-      write(*,*) 'V 2.2, Nov 2013'
+      write(*,*) 'AccurrateMass output reader PLOTMSMS'
+      write(*,*) 'V 1.0, JULY 2021'
       write(*,*)
       write(*,*) 'xmgrace file body ',trim(xname)
       write(*,*) 'Reading ... ', trim(fname)
@@ -332,11 +338,14 @@
         enddo
         checksum=checksum+chrg
         ! move H to the end of formula
+
         cindex = INDEX(aaa,'C')
+        if (cindex > 0) then
         bbb = aaa(1:cindex-1)
         aaa = aaa(cindex:length)//bbb
-
+        end if
         formula = trim(aaa)
+
 
         aaa = ''
 

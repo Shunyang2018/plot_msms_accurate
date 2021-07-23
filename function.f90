@@ -23,7 +23,7 @@
      real*8  mint(*)
      real*4  rnd(ndim,nrnd)
      character*80 formula
-     real*8  prob(200,4),massiso(200,4),p1,p2,x,xmass,examass
+     real*8  prob(200,6),massiso(200,6),p1,p2,x,xmass,examass
      integer niso(200)
      integer nmass(10000)
      integer n,i,j,iso,imass,isum,k,iti
@@ -125,21 +125,39 @@
      prob(2,1)=100.
      massiso(2,1)=4.0026
 ! TK Neon (assume to be monoisotopic)
-     niso(10)=1
-     prob(10,1)=100.
-     massiso(10,1)=20.180
+     niso(10)=3
+     prob(10,1)=90.48
+     massiso(10,1)=19.992440176
+     prob(10,2)=0.27
+     massiso(10,2)=20.999384674
+     prob(10,3)=9.25
+     massiso(10,3)=21.99138550
 ! TK Argon (assume to be monoisotopic)
-     niso(18)=1
-     prob(18,1)=100.
-     massiso(18,1)=39.948
+     niso(18)=3
+     prob(18,1)=0.3365
+     massiso(18,1)=35.96754626
+     prob(18,2)=0.0632
+     massiso(18,2)=37.9627322
+     prob(18,3)=99.6003
+     massiso(18,3)=39.962383124
 ! TK Krypton (assume to be monoisotopic)
-     niso(36)=1
-     prob(36,1)=100.
-     massiso(36,1)=83.798
+     niso(36)=6
+     prob(36,1)=0.355
+     massiso(36,1)=77.920388
+     prob(36,2)=2.286
+     massiso(36,2)=79.916379
+     prob(36,3)=11.593
+     massiso(36,3)=81.9134850
+     prob(36,4)=11.5
+     massiso(36,4)=82.914137
+     prob(36,5)=56.987
+     massiso(36,5)=83.911508
+     prob(36,6)=17.279
+     massiso(36,6)=85.910615
 ! TK Xenon (assume to be monoisotopic)
-     niso(54)=1
-     prob(54,1)=100.
-     massiso(54,1)=131.29
+     !niso(54)=1
+     !prob(54,1)=100.
+     !massiso(54,1)=131.29
 ! SW new added
      !  28 Ni (Nickel)
             niso(28)=5
@@ -206,8 +224,18 @@
         do j=1,niso(i)
            xm=xm+prob(i,j)
         enddo
-        if(niso(i).gt.0.and.abs(xm-1.).gt.0.01) &
+
+        if(niso(i).gt.0.and.abs(xm-1.).gt.0.01) then
+          write(*,*) 'error point', i, niso(i),xm
+          xm=0
+          do j=1,niso(i)
+             write(*,*) 'prob',prob(i,j)
+             xm=xm+prob(i,j)
+             write(*,*)xm
+
+          enddo
         stop 'internal isotope error 1'
+        end if
      enddo
 
      do i=1,nat
