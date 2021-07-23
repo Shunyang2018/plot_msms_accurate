@@ -32,7 +32,7 @@
      niso=0
      prob=0
      massiso=0
-! SW accuatemass
+! SW accuratemass
 ! TK 1H
      niso(1)=2
      prob(1,1)=0.0115
@@ -78,7 +78,6 @@
      massiso(14,3)=29.973770
 
 ! SW 15P
-! TK 15N
      niso(15)=1
      prob(15,1)=100.
      massiso(15,1)=30.973762
@@ -141,6 +140,57 @@
      niso(54)=1
      prob(54,1)=100.
      massiso(54,1)=131.29
+! SW new added
+     !  28 Ni (Nickel)
+            niso(28)=5
+            prob(28,1)=68.08
+            prob(28,2)=26.22
+            prob(28,3)=1.14
+            prob(28,4)=3.63
+            prob(28,5)=0.93
+            massiso(28,1)=57.935343
+            massiso(28,2)=59.930786
+            massiso(28,3)=60.931056
+            massiso(28,4)=61.928345
+            massiso(28,5)=63.927966
+
+       ! 29 Cu (Copper)
+            niso(29)=2
+            prob(29,1)=69.15
+            prob(29,2)=30.85
+            massiso(29,1)=62.929597
+            massiso(29,2)=64.927789
+
+       ! 30 Zn (Zinc)
+            niso(30)=5
+            prob(30,1)=48.6
+            prob(30,2)=27.9
+            prob(30,3)=4.1
+            prob(30,4)=18.8
+            prob(30,5)=0.6
+            massiso(30,1)=63.929142
+            massiso(30,2)=65.926033
+            massiso(30,3)=66.927127
+            massiso(30,4)=67.924884
+            massiso(30,5)=69.925319
+
+     ! 27 Co (Cobalt)
+          niso(27)=1
+          prob(27,1)=100.000
+          massiso(27,1)=58.933195
+
+    ! 74 W(Tungsten)
+          niso(74)=5
+          prob(74,1)=0.12
+          massiso(74,1)=179.946706
+          prob(74,2)=26.50
+          massiso(74,2)=181.948205
+          prob(74,3)=14.31
+          massiso(74,3)=182.9502242
+          prob(74,4)=30.64
+          massiso(74,4)=183.9509323
+          prob(74,5)=28.43
+          massiso(74,5)=185.954362
 
      prob = prob * 0.01
      dictsize=1024
@@ -151,7 +201,7 @@
 
 ! TK mass currently only loops to element 36  (Krypton)
 ! check isotope data saved in this program
-     do i=1,36
+     do i=1,74
         xm=0
         do j=1,niso(i)
            xm=xm+prob(i,j)
