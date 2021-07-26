@@ -121,6 +121,7 @@
       symbol(30)='Zn'
       symbol(27)='Co'
       symbol(74)='W'
+      symbol(24)='Cr'
 ! edit this path name to some standard xmgrace plot file
 ! TK changed to direct working path
 
@@ -188,7 +189,7 @@
 
       if(cthr.ge.0)then
       write(*,'( &
-      '' couting ions with charge from '',f4.1,'' to '',f4.1)')   cthr,cthr2
+      '' counting ions with charge from '',f4.1,'' to '',f4.1)')   cthr,cthr2
       else
       write(*,'( &
       '' counting all fragments with unity charge (frag. overview)'')')
@@ -248,7 +249,7 @@
  10   read(1,*,end=100)chrg2,irun,jsec,nf,k,(iat(kk),nat(kk),kk=1,k)
       !            0.9999912  100 2 1    3     1  9   6  3  14  1
       ! TK just for debug purposes
-      write(*,*) chrg2,irun,jsec,nf,k,(iat(kk),nat(kk),kk=1,k)
+      !write(*,*) chrg2,irun,jsec,nf,k,(iat(kk),nat(kk),kk=1,k)
       ! TK end debug purposes
 
       ! TK normal program
@@ -289,7 +290,7 @@
       jal=0
       checksum =0
       checksum2=0
- 11   read(1,*,end=101)chrg2,irun,jsec,nf,k,(iat(kk),nat(kk),kk=1,k)
+ 112   read(1,*,end=101)chrg2,irun,jsec,nf,k,(iat(kk),nat(kk),kk=1,k)
       sel=.false.
       chrg=chrg2
       checksum2(irun)=checksum2(irun)+chrg2
@@ -387,7 +388,7 @@
         deallocate(key_list)
         i=i+1
       endif
-      goto 11
+      goto 112
 101   continue
       write(*,*) n,' (charged) fragments done.'
       write(*,*)
@@ -403,7 +404,7 @@
             write(*,*) 'checksum error for trj', i,' chrg=',checksum2(i)
          endif
       enddo
-      write(*,*) k,' successfull runs.'
+!      write(*,*) k,' successfull runs.'
 
       write(*,*)
       write(*,*) 'ion sources:'
@@ -556,8 +557,10 @@
 ! TK new: numspec = idint(tmax) ** not related to number ofr spectral peaks
      numspec = 0
      do i=10,10000
+         !write(*,*)tmass(i)
          if(tmass(i).ne.0)then
-           intint = int(1000.*tmass(i)/tmax)
+           intint = nint(1000.*tmass(i)/tmax)
+           !write(*,*)intint
            if (intint >=1) then
             numspec = numspec + 1
          endif
@@ -572,7 +575,7 @@
          if(tmass(i).ne.0)then
            ! unit mass to exact mass
            ! write(11,"(I4, I8)") i, int(100.*tmass(i)/tmax)
-           intint = int(1000.*tmass(i)/tmax)
+           intint = nint(1000.*tmass(i)/tmax)
            if (intint >=1) then
              s = s + 1
            write(11,"(I4, I8)") i, intint
@@ -598,10 +601,10 @@
 
     write(*,*)'write accurate mass...'
 !    write(*,*)'before sorting',tkey_list
-    write(*,*)'sort key list'
+!    write(*,*)'sort key list'
 
     CALL qsort(tkey_list,array_len,array_size,cmp_function) ! sort mass in float order
-    write(*,*)tkey_list
+!    write(*,*)tkey_list
     kmax = 0.
 ! normalize m/z
     write(*,*)'normalizing m/z'
@@ -682,9 +685,9 @@ write(111,9) ADJUSTL(trim(tkey_list(i))),intensity,formula2
     close(1111)
 
 
-9   format(a,2x, F7.2, 2x, a20)
-8   format(a20,2x,a,2x, I8)
-99   format(a20,2x, a, 2x, F7.2)
+9   format(a,2x, F7.2, 2x, a40)
+8   format(a40,2x,a,2x, I8)
+99   format(a,2x, a, 2x, F7.2)
 
 
 

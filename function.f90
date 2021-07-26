@@ -159,6 +159,16 @@
      !prob(54,1)=100.
      !massiso(54,1)=131.29
 ! SW new added
+! 24 Cr (Chromium)
+     niso(24)=4
+     prob(24,1)=4.35
+     prob(24,2)=83.79
+     prob(24,3)=9.50
+     prob(24,4)=2.37
+     massiso(24,1)=49.946044
+     massiso(24,2)=51.940507
+     massiso(24,3)=52.940649
+     massiso(24,4)=53.938880
      !  28 Ni (Nickel)
             niso(28)=5
             prob(28,1)=68.08
@@ -273,7 +283,8 @@
      xmass = aint( xmass * 10000.0) / 10000.0
 
      !SW mass and intensity
-     imass=int(xmass)
+     ! nint is different from int !!!
+     imass=nint(xmass)
      nmass(imass)=nmass(imass)+1
      !SW exact mass and intensity
      write(charstrk,'(F16.4)')xmass
