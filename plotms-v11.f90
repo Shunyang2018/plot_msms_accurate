@@ -32,7 +32,7 @@
 !     Adapted version:
 !     Shunyang Wang - FiehnLab 2020
 !     Shunyang Wang - Dec 2020
-!
+!     Shunyang Wang - July 2021
 !====================================================================
 
 
@@ -184,6 +184,8 @@
       write(*,*) 'AccurrateMass output reader PLOTMSMS'
       write(*,*) 'V 1.0, JULY 2021'
       write(*,*)
+      write(*,*)'Please cite as'
+      write(*,*)'S.Grimme, Angew.Chem.Int.Ed. 52 (2013) 6306-6312.'
       write(*,*) 'xmgrace file body ',trim(xname)
       write(*,*) 'Reading ... ', trim(fname)
 
