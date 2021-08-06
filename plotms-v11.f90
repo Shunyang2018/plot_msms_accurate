@@ -354,7 +354,7 @@
 
 
 ! compute pattern, nsig signals at masses mass with int mint
-        write(*,*)'calculating traj',irun,'step',jsec,'frag',nf
+        write(*,*)'calculating traj'!,irun,'step',jsec,'frag',nf
 ! natot total atom number
         call isotope(natot,idum,ndim,nrnd,rnd,mass,mint,nsig,dict, &
         mdict,key_list,formula)
