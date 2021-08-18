@@ -112,6 +112,8 @@
       symbol(35)='Br'
       symbol(2)='He'
       symbol(10)='Ne'
+      symbol(11)='Na'
+      symbol(19)='K'
       symbol(18)='Ar'
       symbol(36)='Kr'
       symbol(54)='Xe'
@@ -354,7 +356,7 @@
 
 
 ! compute pattern, nsig signals at masses mass with int mint
-        write(*,*)'calculating traj'!,irun,'step',jsec,'frag',nf
+        !write(*,*)'calculating traj'!,irun,'step',jsec,'frag',nf
 ! natot total atom number
         call isotope(natot,idum,ndim,nrnd,rnd,mass,mint,nsig,dict, &
         mdict,key_list,formula)
