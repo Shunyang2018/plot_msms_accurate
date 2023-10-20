@@ -1,8 +1,8 @@
 # plot_msms
 
-edit for ms/ms file 
+Edit for ms/ms file 
 *************************
-last modified on Dec 16th 2020
+Last modified on Dec 16th 2020
 - match the correct format for jdx file.
 
 ## To use 
