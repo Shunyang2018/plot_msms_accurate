@@ -9,7 +9,7 @@ Edited for ms/ms file processing with accurate mass
 
 Make sure the qceims.res file is exsit.  
 
-Run the executable file plotms. 
+Run the executable file plotms_accurate. 
 
 ## Output
 All the formula will be in the formula.txt 
